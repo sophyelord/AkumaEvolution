@@ -1,0 +1,27 @@
+1. Improve genetic evolution mechanism.
+	1.1 Make it more general (The GeneticEvolution class should not deal with specifics)
+	1.2 Reduce number of helper interfaces/classes and make them more intuitive
+	1.3 Reduce the number of classes to be implemented when wanting to optimize some data
+	1.4 The spec is just a spec, it only contains data, should not do anything but have getters
+	1.5 The only classes that need methods to manipulate data are the ones that implement EvolutionHandler
+	...
+	
+2. Implement more reliable OptimizableTesters which give more consistent fitness values
+
+3. Improve evolution handlers
+	3.1 Iteration should be better than spawning many individuals repeatedly
+	3.2 Try to make iteration greedier, individuals improve every iteration (limit case)
+	3.3 Implement a way to do species effectively, no suffocating
+	3.4 General evolution schema
+	3.5 Think about how to implement evolution with inconsistent fitness fuctions (alpha zero)
+		and multi optimizable tesing
+	3.6 Think about how to select leaving individuals and what to do with the ones staying 
+	(always mutate?, crossover ?, new random individuals?)
+	
+
+4. Implement a layer for heavy computing.
+
+5. Implement a layer to manage OpenCl
+
+6. Implement a layer to manage computing over many computers that are connected
+	
