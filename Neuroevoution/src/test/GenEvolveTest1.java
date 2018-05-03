@@ -8,6 +8,7 @@ import geneticEvolution.GeneticEvolution;
 import geneticEvolution.OptimizableGeneration;
 import geneticEvolution.OptimizableModifier;
 import geneticEvolution.OptimizableTester;
+import geneticEvolution.evolvers.BestMutationEvolution;
 import geneticEvolution.evolvers.SingleGenerationEvolution;
 import geneticEvolution.optimizabletester.OutputSumZero;
 import metric.EuclideanMetric;
@@ -32,18 +33,17 @@ public class GenEvolveTest1 {
 			@Override
 			public NeuralNetwork randomize(NeuralNetwork t, NeuralNetwork bias, float stdev) {
 				 
-				return NeuralNetwork.randomize(t, stdev);
+				return NeuralNetwork.gaussianMutate(bias, stdev);
 			}
 		};
 		
-		GeneralGeneticEvolutionSpec<NeuralNetwork> gges = new GeneralGeneticEvolutionSpec<NeuralNetwork>(optmod, opttest, 100000, 5);
-		GeneticEvolution<NeuralNetwork> genevol = new SingleGenerationEvolution<NeuralNetwork>(gges);
-		
+		GeneralGeneticEvolutionSpec<NeuralNetwork> gges = new GeneralGeneticEvolutionSpec<NeuralNetwork>(optmod, opttest, 100, 5);
+		GeneticEvolution<NeuralNetwork> genevol = new BestMutationEvolution<NeuralNetwork>(gges,100, 0.3f);
 		genevol.run();
 		
 		System.out.println(genevol.getGeneration().getIBestOptimizable(0));
 		System.out.println(genevol.getGeneration().getIBestFitness(0));
-		//System.out.println(realFitness(genevol.getGeneration().getIBestOptimizable(0)));
+		System.out.println(realFitness(genevol.getGeneration().getIBestOptimizable(0)));
 		
 	}
 
