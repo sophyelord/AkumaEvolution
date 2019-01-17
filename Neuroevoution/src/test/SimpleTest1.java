@@ -10,7 +10,7 @@ import objectInterface.ObjectToolkit;
 import offspring.OffspringAlgorithm;
 import offspring.OffspringGenerator;
 import offspring.ToolkitInsuficientException;
-import population.EvaluatedIndividual;
+import population.Individual;
 import population.EvaluatedPopulation;
 import population.Population;
 import search.SearchEngine;
@@ -120,11 +120,11 @@ public class SimpleTest1 {
 				evPop = new EvaluatedPopulation<float[]>() {
 					
 					@Override
-					public Iterator<EvaluatedIndividual<float[]>> iterator() {
+					public Iterator<Individual<float[]>> iterator() {
 						
 						Iterator<float[]> it  = population.iterator();
 						
-						return new Iterator<EvaluatedIndividual<float[]>>() {
+						return new Iterator<Individual<float[]>>() {
 
 							@Override
 							public boolean hasNext() {
@@ -133,7 +133,7 @@ public class SimpleTest1 {
 							}
 
 							@Override
-							public EvaluatedIndividual<float[]> next() {
+							public Individual<float[]> next() {
 								float[] fa = it.next();
 								float sc = 0;
 								for (float f: fa ) {
@@ -141,7 +141,7 @@ public class SimpleTest1 {
 									sc += f;
 								}
 								
-								return new EvaluatedIndividual<float[]>(fa, sc);
+								return new Individual<float[]>(fa, sc);
 							}
 						};
 					}
@@ -177,7 +177,7 @@ public class SimpleTest1 {
 				
 				float mean = 0;
 				
-				for (EvaluatedIndividual<float[]> ind: population) {
+				for (Individual<float[]> ind: population) {
 					mean += ind.getScore();
 				}
 				
@@ -186,7 +186,7 @@ public class SimpleTest1 {
 				System.out.println(mean);
 				float var = 0;
 				
-				for (EvaluatedIndividual<float[]> ind: population) {
+				for (Individual<float[]> ind: population) {
 					var += (ind.getScore() - mean)*(ind.getScore() - mean);
 				}
 				

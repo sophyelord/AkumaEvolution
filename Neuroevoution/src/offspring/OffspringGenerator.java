@@ -1,6 +1,6 @@
 package offspring;
 
-import population.EvaluatedPopulation;
+import population.Generation;
 import population.Population;
 import search.OracleObserver;
 
@@ -13,6 +13,6 @@ public interface OffspringGenerator<OBJ> extends OracleObserver<OBJ>{
 	public void generateOffspring();
 	
 	public Population<OBJ> getPopulation();
-	public void setPopulation(EvaluatedPopulation<OBJ> population); //To set evaluated population
+	public void setGeneration(Generation<OBJ> population); //To set evaluated population
 	
 }
