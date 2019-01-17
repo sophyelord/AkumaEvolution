@@ -1,8 +1,11 @@
 package terminationCriteria;
 
-public interface SearchTerminator<OBJ> {
+import genealogy.GenealogyObserver;
+import population.EvaluatedPopulation;
 
-	public void evaluateCriterion();
+public interface SearchTerminator<OBJ> extends GenealogyObserver{
+
+	public void evaluateCriterion(EvaluatedPopulation<OBJ> population);
 	
 	public boolean searchOver();
 }

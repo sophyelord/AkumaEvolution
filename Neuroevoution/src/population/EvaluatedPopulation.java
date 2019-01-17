@@ -1,5 +1,5 @@
 package population;
 
-public interface EvaluatedPopulation<OBJ> extends Population<OBJ>{
+public interface EvaluatedPopulation<OBJ> extends Population<EvaluatedIndividual<OBJ>>{
 
 }

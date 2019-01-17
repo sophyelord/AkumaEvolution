@@ -1,9 +1,13 @@
 package evaluation;
 
-public interface Evaluator<OBJ> extends Runnable {
+import genealogy.GenealogyObserver;
+import population.EvaluatedPopulation;
+import population.Population;
 
-	public void setPopulation(); //Lazy computing, does not do much but defining the computation
+public interface Evaluator<OBJ> extends Runnable, GenealogyObserver{
+
+	public void setPopulation(Population<OBJ> population); //Lazy computing, does not do much but defining the computation
 	
-	public void getPopulation(); //Evaluated population
-	
+	public EvaluatedPopulation<OBJ> getPopulation(); //Evaluated population
+
 }

@@ -1,14 +1,18 @@
 package offspring;
 
-public interface OffspringGenerator<OBJ> {
+import genealogy.GenealogyObserver;
+import population.EvaluatedPopulation;
+import population.Population;
 
-	//Initialize runnable
+public interface OffspringGenerator<OBJ> extends GenealogyObserver{
+
+	//Initialize
 	public void init();
 	
 	//While running
 	public void generateOffspring();
 	
-	public void getPopulation();
-	public void setPopulation(); //To set evaluated population
+	public Population<OBJ> getPopulation();
+	public void setPopulation(EvaluatedPopulation<OBJ> population); //To set evaluated population
 	
 }
