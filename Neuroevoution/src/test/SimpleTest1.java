@@ -14,13 +14,14 @@ import population.EvaluatedIndividual;
 import population.EvaluatedPopulation;
 import population.Population;
 import search.SearchEngine;
-import terminationCriteria.SearchTerminator;
+import termination.SearchTerminator;
 
 public class SimpleTest1 {
 
 	public static void main(String[] args) {
 		
 		OffspringAlgorithm<float[]> algo = new OffspringAlgorithm<float[]>() {
+			
 			
 			
 			@Override
@@ -31,6 +32,7 @@ public class SimpleTest1 {
 
 					Population<float[]> pop;
 					EvaluatedPopulation<float[]> evPop;
+					Random r = new Random();
 					
 					@Override
 					public void init() {
@@ -46,7 +48,7 @@ public class SimpleTest1 {
 								for (int j = 0 ; j < 100 ; j++) {
 									float[] f = new float[100];
 									
-									Random r = new Random();
+									
 									
 									for (int i = 0 ; i < f.length ; i++) {
 										f[i] = (r.nextFloat()-0.5f)*20;
@@ -188,9 +190,10 @@ public class SimpleTest1 {
 					var += (ind.getScore() - mean)*(ind.getScore() - mean);
 				}
 				
-				if (var < 100) {
+				if (var < 100000) {
 					searchO = true;
 				}
+				System.out.println(var);
 			}
 
 			@Override

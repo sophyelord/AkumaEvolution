@@ -1,10 +1,10 @@
 package offspring;
 
-import genealogy.GenealogyObserver;
 import population.EvaluatedPopulation;
 import population.Population;
+import search.OracleObserver;
 
-public interface OffspringGenerator<OBJ> extends GenealogyObserver{
+public interface OffspringGenerator<OBJ> extends OracleObserver<OBJ>{
 
 	//Initialize
 	public void init();
