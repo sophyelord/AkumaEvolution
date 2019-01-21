@@ -1,209 +1,67 @@
 package test;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Random;
 
-import evaluation.Evaluator;
-import objectInterface.ObjectToolkit;
-import offspring.OffspringAlgorithm;
-import offspring.OffspringGenerator;
-import offspring.ToolkitInsuficientException;
-import population.Individual;
-import population.EvaluatedPopulation;
-import population.Population;
-import search.SearchEngine;
-import termination.SearchTerminator;
-
-public class SimpleTest1 {
+ class SimpleTest1 {
 
 	public static void main(String[] args) {
+	
+		//Simple random search
+		Random r = new Random();
 		
-		OffspringAlgorithm<float[]> algo = new OffspringAlgorithm<float[]>() {
-			
-			
-			
-			@Override
-			public OffspringGenerator<float[]> bindToolkit(ObjectToolkit<float[]> toolkit)
-					throws ToolkitInsuficientException {
-				
-				return new OffspringGenerator<float[]>() {
-
-					Population<float[]> pop;
-					EvaluatedPopulation<float[]> evPop;
-					Random r = new Random();
-					
-					@Override
-					public void init() {
-					
-						
-						pop = new Population<float[]>() {
-							
-							List<float[]> pop = randomize();
-							
-							private List<float[]> randomize() {
-								
-								List<float[]> l = new ArrayList<>();
-								for (int j = 0 ; j < 100 ; j++) {
-									float[] f = new float[100];
-									
-									
-									
-									for (int i = 0 ; i < f.length ; i++) {
-										f[i] = (r.nextFloat()-0.5f)*20;
-									}
-									l.add(f);
-								}
-								return l;
-								
-							}
-							
-							@Override
-							public Iterator<float[]> iterator() {
-								return pop.iterator();
-							}
-
-							@Override
-							public int getSize() {
-								return pop.size();
-							}
-						};
-						
-					}
-
-					@Override
-					public void generateOffspring() {
-						if (evPop != null) {
-							init();
-							evPop = null;
-						}
-						
-					}
-
-					@Override
-					public Population<float[]> getPopulation() {
-						
-						return pop;
-					}
-
-					@Override
-					public void setPopulation(EvaluatedPopulation<float[]> population) {
-						evPop = population;
-						
-					}
-				};
-			}
-
-			@Override
-			public Class<?>[] getToolkitImplementationRequirements() {
-				
-				return new Class[0];
-			}
-		};
+		float[][] population = new float[100][100];
+		float[] best = null;
 		
-		OffspringGenerator<float[]> og = null;
-		try {
-			og = algo.bindToolkit(null);
-		} catch (ToolkitInsuficientException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		float bestScore = Float.NEGATIVE_INFINITY;
+		
+		while (true) {
+			
+			//Offspring
+			for (float[] fa : population) {
+				
+				for (int i = 0 ; i < fa.length ; i++) {
+					fa[i] = r.nextFloat()*2 - 1;
+				}
+				
+			}
+			
+			//Evaluate
+			for (int j = 0 ; j < population.length ; j++) {
+				
+				float sc = 0;
+				float error = 0;
+				for (int i = 0 ; i < population[j].length ; i++) {
+					
+					float e = (float) (Math.sin(i) - population[j][i]);
+					
+					if (e < 0)
+						error += -e;
+					else
+						error += e;
+					
+				}
+				
+				sc  = -error;
+				if (sc > bestScore) {
+					bestScore = sc;
+					best = Arrays.copyOf(population[j], population[j].length);
+					System.out.println(sc);
+				}
+				
+			}
+			
+			//Termination criteria
+			if (bestScore > -40)
+				break;
+		
 		}
 		
-		Evaluator<float[]> ev = new Evaluator<float[]>() {
-
-			Population<float[]> population;
-			EvaluatedPopulation<float[]> evPop;
-			
-			@Override
-			public void run() {
-				evPop = new EvaluatedPopulation<float[]>() {
-					
-					@Override
-					public Iterator<Individual<float[]>> iterator() {
-						
-						Iterator<float[]> it  = population.iterator();
-						
-						return new Iterator<Individual<float[]>>() {
-
-							@Override
-							public boolean hasNext() {
-								
-								return it.hasNext();
-							}
-
-							@Override
-							public Individual<float[]> next() {
-								float[] fa = it.next();
-								float sc = 0;
-								for (float f: fa ) {
-									
-									sc += f;
-								}
-								
-								return new Individual<float[]>(fa, sc);
-							}
-						};
-					}
-					
-					@Override
-					public int getSize() {
-						// TODO Auto-generated method stub
-						return population.getSize();
-					}
-				};
-				
-			}
-
-			@Override
-			public void setPopulation(Population<float[]> population) {
-				this.population = population;
-				
-			}
-
-			@Override
-			public EvaluatedPopulation<float[]> getPopulation() {
-				return evPop;
-				
-			}
-		};
 		
-		SearchTerminator<float[]> st = new SearchTerminator<float[]>() {
-
-			boolean searchO = false;
-			
-			@Override
-			public void evaluateCriterion(EvaluatedPopulation<float[]> population) {
-				
-				float mean = 0;
-				
-				for (Individual<float[]> ind: population) {
-					mean += ind.getScore();
-				}
-				
-				mean /= population.getSize();
-				
-				System.out.println(mean);
-				float var = 0;
-				
-				for (Individual<float[]> ind: population) {
-					var += (ind.getScore() - mean)*(ind.getScore() - mean);
-				}
-				
-				if (var < 100000) {
-					searchO = true;
-				}
-				System.out.println(var);
-			}
-
-			@Override
-			public boolean searchOver() {
-				// TODO Auto-generated method stub
-				return searchO;
-			}
-		};
+		for (float f : best) {
+			System.out.println(f);
+		}
 		
-		SearchEngine<float[]> engine = new SearchEngine<>(og, ev, st);
-		engine.run();
+		
 	}
 }

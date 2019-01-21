@@ -1,3 +1,3 @@
 package population;
 
-public interface Population<OBJ> extends Iterable<OBJ> {}
+public interface Population<OBJ> extends Iterable<Individual<OBJ>> {}
