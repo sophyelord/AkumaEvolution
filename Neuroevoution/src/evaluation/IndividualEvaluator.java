@@ -1,10 +1,11 @@
 package evaluation;
 
 import population.Individual;
+import tasks.SearchTask;
 
-public interface IndividualEvaluator<OBJ> extends Runnable{
+public interface IndividualEvaluator<OBJ> {
 
-	public void setIndividual(Individual<OBJ> obj);
+	public SearchTask generateIndividualEvaluation(Individual<OBJ> obj);
 	
 	
 }

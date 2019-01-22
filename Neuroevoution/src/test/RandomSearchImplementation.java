@@ -13,6 +13,7 @@ import search.extensions.EvaluatorNotSetException;
 import search.extensions.MultiEvaluable;
 import search.extensions.MultiObjectToolkit;
 import search.extensions.ToolkitNotSetException;
+import tasks.SearchTask;
 
 
 public class RandomSearchImplementation<OBJ> implements Search<OBJ>, MultiObjectToolkit<OBJ>, MultiEvaluable<OBJ> {
@@ -53,8 +54,8 @@ public class RandomSearchImplementation<OBJ> implements Search<OBJ>, MultiObject
 		
 		if (!this.evaluated) {
 			
-			eval.setPopulation(population);
-			eval.run();
+			SearchTask task = eval.generateEvaluation(population);
+			task.run();
 			
 		}
 		

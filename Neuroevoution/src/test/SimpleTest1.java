@@ -6,27 +6,53 @@ import java.util.Random;
 import evaluation.Evaluator;
 import evaluation.IndividualEvaluator;
 import evaluation.IndividualEvaluatorImp;
-import evaluation.NumericEvaluatorImp;
-import evaluation.samples.SumNumericEvaluator;
 import objectInterface.ObjectToolkit;
 import objectInterface.samples.FloatVectorToolkit;
 import population.BasicPopulation;
+import population.Individual;
 import population.Population;
 import population.PopulationAnalyzer;
+import population.extensions.EditableIndividual;
+import tasks.SearchTask;
 
 class SimpleTest1 {
 
 	public static void main(String[] args) {
 	
 		
-		//Evaluator creation
-		SumNumericEvaluator<Float> sumNumericEvaluator = new SumNumericEvaluator<>();
-		IndividualEvaluator<Float[]> indEval = new NumericEvaluatorImp<Float>(sumNumericEvaluator);
+		
+		IndividualEvaluator<Float[]> indEval = new IndividualEvaluator<Float[]>() {
+
+			@Override
+			public SearchTask generateIndividualEvaluation(Individual<Float[]> obj) {
+				
+				return new SearchTask() {
+				
+					private EditableIndividual<Float[]> ind = (EditableIndividual<Float[]>)obj;
+					
+					@Override
+					public void run() {
+						
+						Float[] flo = ind.getIndividual();
+						
+						float sum = 0;
+						
+						for (Float f : flo) {
+							sum += f;
+						}
+						
+						ind.setScore(sum);
+						
+					}
+				};
+			}
+		};
+		
 		Evaluator<Float[]> eval = new IndividualEvaluatorImp<>(indEval);
 		
-		ObjectToolkit<Float[]> fvt = new FloatVectorToolkit(100, 0, 2);
+		ObjectToolkit<Float[]> fvt = new FloatVectorToolkit(4, 0, 2);
 		
-		Float[][] startingSet = new Float[100][100];
+		Float[][] startingSet = new Float[100][4];
 		
 		Random r = new Random();
 		
