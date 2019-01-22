@@ -3,63 +3,62 @@ package test;
 import java.util.Arrays;
 import java.util.Random;
 
- class SimpleTest1 {
+import evaluation.Evaluator;
+import evaluation.IndividualEvaluator;
+import evaluation.IndividualEvaluatorImp;
+import evaluation.NumericEvaluatorImp;
+import evaluation.samples.SumNumericEvaluator;
+import objectInterface.ObjectToolkit;
+import objectInterface.samples.FloatVectorToolkit;
+import population.BasicPopulation;
+import population.Population;
+import population.PopulationAnalyzer;
+
+class SimpleTest1 {
 
 	public static void main(String[] args) {
 	
-		//Simple random search
+		
+		//Evaluator creation
+		SumNumericEvaluator<Float> sumNumericEvaluator = new SumNumericEvaluator<>();
+		IndividualEvaluator<Float[]> indEval = new NumericEvaluatorImp<Float>(sumNumericEvaluator);
+		Evaluator<Float[]> eval = new IndividualEvaluatorImp<>(indEval);
+		
+		ObjectToolkit<Float[]> fvt = new FloatVectorToolkit(100, 0, 2);
+		
+		Float[][] startingSet = new Float[100][100];
+		
 		Random r = new Random();
 		
-		float[][] population = new float[100][100];
-		float[] best = null;
-		
-		float bestScore = Float.NEGATIVE_INFINITY;
-		
-		while (true) {
-			
-			//Offspring
-			for (float[] fa : population) {
-				
-				for (int i = 0 ; i < fa.length ; i++) {
-					fa[i] = r.nextFloat()*2 - 1;
-				}
-				
-			}
-			
-			//Evaluate
-			for (int j = 0 ; j < population.length ; j++) {
-				
-				float sc = 0;
-				float error = 0;
-				for (int i = 0 ; i < population[j].length ; i++) {
-					
-					float e = (float) (Math.sin(i) - population[j][i]);
-					
-					if (e < 0)
-						error += -e;
-					else
-						error += e;
-					
-				}
-				
-				sc  = -error;
-				if (sc > bestScore) {
-					bestScore = sc;
-					best = Arrays.copyOf(population[j], population[j].length);
-					System.out.println(sc);
-				}
-				
-			}
-			
-			//Termination criteria
-			if (bestScore > -40)
-				break;
-		
+		for (int i = 0 ; i < startingSet.length ; i++) {
+			for (int j = 0 ; j < startingSet[i].length ; j++)
+				startingSet[i][j] = r.nextFloat()*2;
 		}
 		
 		
-		for (float f : best) {
-			System.out.println(f);
+		Population<Float[]> population = new BasicPopulation<Float[]>(Arrays.asList(startingSet));
+		
+		RandomSearchImplementation<Float[]> rsi = new RandomSearchImplementation<Float[]>(population, fvt, eval);
+		rsi.evaluate();
+		
+		
+		float max = Float.NEGATIVE_INFINITY;
+		while (true) {
+			
+			rsi.generateOffspring();
+			rsi.evaluate();
+			
+			population = rsi.getPopulation();
+			
+			
+			@SuppressWarnings("unchecked")
+			PopulationAnalyzer<Float[]> pa = (PopulationAnalyzer<Float[]>) population;
+			
+			if (max < pa.getMaxScoreIndividual().getScore()) {
+				max = pa.getMaxScoreIndividual().getScore();
+				System.out.println("max_score:" + max);
+			}
+			
 		}
 		
 		

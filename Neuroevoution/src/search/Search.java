@@ -17,7 +17,5 @@ public interface Search<OBJ> {
 	//Generate the population offspring, replacing current population with it
 	public void generateOffspring();
 	
-	//Terminate the search
-	public void terminateSearch();
 	
 }

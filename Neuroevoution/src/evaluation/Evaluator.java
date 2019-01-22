@@ -1,7 +1,6 @@
 package evaluation;
 
 import population.Population;
-import search.OracleObserver;
 
 public interface Evaluator<OBJ> extends Runnable {
 

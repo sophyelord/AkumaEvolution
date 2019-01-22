@@ -9,8 +9,10 @@ import population.BasicPopulation;
 import population.Individual;
 import population.Population;
 import search.Search;
+import search.extensions.EvaluatorNotSetException;
 import search.extensions.MultiEvaluable;
 import search.extensions.MultiObjectToolkit;
+import search.extensions.ToolkitNotSetException;
 
 
 public class RandomSearchImplementation<OBJ> implements Search<OBJ>, MultiObjectToolkit<OBJ>, MultiEvaluable<OBJ> {
@@ -18,15 +20,16 @@ public class RandomSearchImplementation<OBJ> implements Search<OBJ>, MultiObject
 	private Population<OBJ> population;
 	
 	private boolean evaluated;
-	private boolean terminated;
-	
 	
 	private ObjectToolkit<OBJ> toolkit;
 	private Evaluator<OBJ> eval;
 	
-	public RandomSearchImplementation() {
-		this.evaluated = false;
-		this.terminated = false;
+	public RandomSearchImplementation(Population<OBJ> population , ObjectToolkit<OBJ> toolkit , Evaluator<OBJ> eval) {
+		
+		setPopulation(population);
+		setEvaluator(eval);
+		setObjectToolkit(toolkit);
+		
 	}
 	
 	@Override
@@ -44,6 +47,10 @@ public class RandomSearchImplementation<OBJ> implements Search<OBJ>, MultiObject
 	@Override
 	public void evaluate() {
 		
+		
+		if (this.eval == null)
+			throw new EvaluatorNotSetException();
+		
 		if (!this.evaluated) {
 			
 			eval.setPopulation(population);
@@ -58,9 +65,12 @@ public class RandomSearchImplementation<OBJ> implements Search<OBJ>, MultiObject
 	@Override
 	public void generateOffspring() {
 		
+		if (this.toolkit == null)
+			throw new ToolkitNotSetException();
+		
 		List<OBJ> newGen = new ArrayList<>();
 		
-		for (Individual<OBJ> in :population) {
+		for (@SuppressWarnings("unused") Individual<OBJ> in :population) {
 			
 			OBJ newInd = toolkit.constructor();
 			toolkit.randomize(newInd);
@@ -70,15 +80,9 @@ public class RandomSearchImplementation<OBJ> implements Search<OBJ>, MultiObject
 		}
 		
 		population = new BasicPopulation<>(newGen);
-		
+		this.evaluated = false;
 	}
 
-	@Override
-	public void terminateSearch() {
-		
-		this.terminated = true;
-		
-	}
 
 	@Override
 	public void setEvaluator(Evaluator<OBJ> eval) {
