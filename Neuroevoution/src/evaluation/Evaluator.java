@@ -1,11 +1,11 @@
 package evaluation;
 
+import Tasks.Task;
 import population.Population;
 
-public interface Evaluator<OBJ> extends Runnable {
+public interface Evaluator<OBJ>{
 
-	public void setPopulation(Population<OBJ> population); //Lazy computing, does not do much but defining the computation
-	
-	
+	public Task generateEvaluation(Population<OBJ> population); //Lazy computing, does not do much but defining the computation
+
 
 }

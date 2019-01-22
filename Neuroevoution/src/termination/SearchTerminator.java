@@ -1,11 +1,10 @@
 package termination;
 
-import population.Generation;
-import search.OracleObserver;
+import population.Population;
 
-public interface SearchTerminator<OBJ> extends OracleObserver<OBJ>{
+public interface SearchTerminator<OBJ> {
 
-	public void evaluateCriterion(Generation<OBJ> population);
+	public void evaluateCriterion(Population<OBJ> population);
 	
 	public boolean searchOver();
 }

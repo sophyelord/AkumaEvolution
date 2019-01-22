@@ -1,10 +1,9 @@
 package offspring;
 
-import population.Generation;
 import population.Population;
 import search.OracleObserver;
 
-public interface OffspringGenerator<OBJ> extends OracleObserver<OBJ>{
+public interface OffspringGenerator<OBJ> {
 
 	//Initialize
 	public void init();
